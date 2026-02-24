@@ -85,7 +85,8 @@ def build_agent() -> AgentExecutor:
     )
 
     llm = ChatOpenAI(model=os.getenv("OPENAI_MODEL", "gpt-4o-mini"), temperature=0)
-    agent = create_openai_tools_agent(llm=llm, tools=all_tools, prompt=prompt)
+    llm_with_tools = llm.bind_tools(all_tools, tool_choice="auto")
+    agent = create_openai_tools_agent(llm=llm_with_tools, tools=all_tools, prompt=prompt)
     return AgentExecutor(agent=agent, tools=all_tools, verbose=True)
 
 
